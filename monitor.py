@@ -17,7 +17,7 @@ if sys.getdefaultencoding() != 'gbk':
 
 def getInfo(info):
     if info == "mem":
-        cmdStr = "free | awk \'{print $2}\' | sed -n \'2p\'"
+        cmdStr = "free | awk \'{print $3}\' | sed -n \'2p\'"
         status,retdata = commands.getstatusoutput(cmdStr)
     elif info == "io":
         cmdStr = "mpstat | awk \'{print $6}\' | sed -n \'4p\'"
