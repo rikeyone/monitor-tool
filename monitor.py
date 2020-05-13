@@ -30,7 +30,7 @@ def getInfo(info):
         exit()
     return retdata
 
-def monitor(info, output, timeout):
+def monitor(info, output, timeout, period):
     track_mem = False
     track_cpu = False
     track_io = False
@@ -72,7 +72,7 @@ def monitor(info, output, timeout):
             tmp.write("mem:%s\n" % line.decode("utf-8"))
         if timeout != None:
             now = int(time.time())
-        time.sleep(3)
+        time.sleep(period)
     tmp.close()
     print "exit time stamp:", now
 
@@ -82,11 +82,13 @@ def main_function():
     """
     parser = OptionParser()
     parser.add_option("--info", "-i", action="store",
-                        dest="info", default=False, help="information which will be traced. Eg. -i mem / -i cpu / -i io")
+                        dest="info", default=False, help="Information which will be traced. Eg. -i mem / -i cpu / -i io")
     parser.add_option("--timeout", "-t", action="store",
                         dest="timeout", default=False, help="Record time (minutes). Eg. -t 10")
     parser.add_option("--output", "-o", action="store",
-                        dest="output", default=False, help="output data file. Eg. -o data.txt")
+                        dest="output", default=False, help="Output data file. Eg. -o data.txt")
+    parser.add_option("--period", "-p", action="store",
+                        dest="period", default=False, help="Period time (second), default is 3s. Eg. -t 1")
 
     (options, args) = parser.parse_args()
     if len(sys.argv) < 2:
@@ -108,7 +110,12 @@ def main_function():
     if options.timeout:
         timeout = options.timeout
 
-    monitor(info, output, timeout)
+    if options.period:
+        period = float(options.period)
+    else:
+        period = 3
+
+    monitor(info, output, timeout, period)
 
 if __name__ == '__main__':
     main_function()
